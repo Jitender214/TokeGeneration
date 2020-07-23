@@ -1,0 +1,177 @@
+
+<pep_config version="3.3.0.0">
+	<!-- To enable PEP Cache the attribute decisionCacheEnabled must be set 
+		to true. The attribute provider should be IProvider implementation class. 
+		The implementor should be implemetation class for ICache -->
+	<!-- cacherefreshtype can be either 'all' or 'onlyupdated' -->
+	<cache decisionCacheEnabled="false" cacherefreshtype="onlyupdated"
+		decisionsOnly="false" provider="net.securent.pep.cache.CacheProvider"
+		implementor="net.securent.admin.sdk.cache.impl.JBossCache"
+		eventProvider="net.securent.pep.event.EventProvider">
+		<!-- Type should be either TTL or Session -->
+		<type>TTL</type>
+		<!-- The resfresh tag can be set to INVALIDATE or UPDATE INVALIDATE will 
+			totally clean up the cache and UPDATE will update the existing cache decisions -->
+		<refresh enable="true">INVALIDATE</refresh>
+		<!--Time Interval in seconds after which the cache will be either INVALIDATED 
+			or UPDATED -->
+		<interval>20</interval>
+		<!-- The prefetch tag can be set to TRUE or FALSE In case of TRUE all the 
+			decisions will be cached during the startup Type must be either user or resource 
+			which is used for bulk updation -->
+		<prefetch enable="false" type="user" bulkUsersPerRequest="10">
+			<prefetchForApis>
+				<api name="isUserAccessAllowed">
+					<!-- Prefetch based on message attributes -->
+					<!-- Attribute for Context -->
+					<!--<message-attribute name="urn:cisco:cepm:3.3:xacml:context-name" 
+						override="true">SampleGroup:SampleApplication:Sample</message-attribute> -->
+					<!-- Attribute for Role Bundle -->
+					<!--<message-attribute name="urn:cisco:cepm:3.3:xacml:rolebundle-name" 
+						override="true">RB11</message-attribute> --><!-- Attribute for Resource Type -->
+					<!--<message-attribute name="urn:cisco:cepm:3.3:xacml:resource-type-name" 
+						override="true">TestAppGrp:TestApp:ResType</message-attribute> -->
+					<!-- Attribute for any attributes -->
+
+					<!-- <message-attribute name="Name" override="false">Balaji</message-attribute> -->
+					<!--<message-attribute name="Name" override="false">Sai</message-attribute> -->
+				</api>
+				<!-- api name="getDecisionsByResourceTypeForAnyAction"/ -->
+			</prefetchForApis>
+			<!-- Selective prefetch for configured Groups, Roles, Resources entities -->
+			<groups>
+				<!-- FQN of GroupName -->
+				<!--<group>SampleGroup:SampleApplication:Group1</group> -->
+			</groups>
+			<roles>
+				<!-- role>SampleGroup:SampleApplication:Role1</role -->
+				<!--<role>SampleGroup:SampleApplication:Role2</role> -->
+			</roles>
+
+			<resources>
+				<!-- FQN of ResourceName -->
+				<!--<resource>SampleGroup:SampleApplication:Res1</resource> -->
+			</resources>
+		</prefetch>
+
+		<!-- ApplicationGroup name for which the caching will be performed -->
+		<applicationgroup>Prime group</applicationgroup>
+		<!-- ApplicationName from the above mentioned ApplicationGroup for which 
+			the caching will be performed -->
+		<application>Prime portal</application>
+	</cache>
+
+
+
+	<logs enable="false" records="100" logsTTL="10" />
+
+	<loadbalance enabled="true">
+		<algorithm>roundrobin</algorithm>
+		<!--Interval is in minutes -->
+		<!-- PEP verifys the status of PDP's configured -->
+		<refreshtime>10</refreshtime>
+		<!-- Sets the default maximum number of connections allowed for a given 
+			host config -->
+		<maxconnectionsperhost>1</maxconnectionsperhost>
+		<!-- Sets the maximum number of connections to be used for the given host 
+			config. -->
+		<maxtotalconnections>10</maxtotalconnections>
+		<!-- PEP waits for specified time to decide the status of PDP -->
+		<!--time out to respond in milliseconds -->
+		<timeout>10000</timeout>
+
+	</loadbalance>
+
+	<pdps>
+
+		<pdp>
+			<protocol>soap</protocol>
+
+			<!-- <username>cpapaxx.gen</username> <password>w53vWmkXustEq6iEZjvEnQ==</password> -->
+			<!-- <username>cpepbxx.gen</username> <password>YGGXU3cPS7VEq6iEZjvEnQ==</password> 
+				o8uoCLxKFedEq6iEZjvEnQ== <username>efpd.gen</username> <password>scPz8EdhNelEq6iEZjvEnQ==</password> -->
+			<!-- <username>efrs.gen</username> <password>CKc2+SuX/HVEq6iEZjvEnQ==</password> -->
+			<!-- <username>epube-ef.gen</username> <password>c711KIfE4kxEq6iEZjvEnQ==</password> -->
+			<!-- <username>codef-ef.gen</username> <password>/4FCPxfJGz9Eq6iEZjvEnQ==</password> -->
+			<!-- <username>cpapaxx.gen</username> <password>o8uoCLxKFedEq6iEZjvEnQ==</password> -->
+			<!-- HMP Dec 001 password -->
+			<!-- <username>hmppd.gen</username> <password>4v0ZWpz2LBdEq6iEZjvEnQ==</password> -->
+			<!-- <username>ssapi-ef.gen</username> <password>f5rFI9QiE4f/L2OK9K10tQ==</password> -->
+			<!-- <username>efrs-ef.gen</username> <password>JAvpDJuj401Eq6iEZjvEnQ==</password> -->
+
+
+			<username>cepm-ops.gen</username>
+			<!-- Non Prod Password -->
+			<password>ODQVxkjNMgJEq6iEZjvEnQ==</password>
+			<!-- Prod Password --> 
+			<!-- <password>NH5OC9yEX3VEq6iEZjvEnQ==</password> -->
+
+			<url>http://cpdpa-stage.cloudapps.cisco.com/services/AuthorizationService</url>
+			<!-- <url>http://efdpdp-stage.cloudapps.cisco.com/services/AuthorizationService</url> -->
+			<!-- <url>http://cpdpa.cloudapps.cisco.com/services/AuthorizationService</url>  -->
+			<!-- <url>http://cpdpa-prd1.cloudapps.cisco.com/services/AuthorizationService</url>  -->
+
+			<responsetype>Object</responsetype>
+			<timeout>1000</timeout>
+		</pdp>
+	</pdps>
+
+	<http-proxy>
+		<host></host>
+		<port></port>
+	</http-proxy>
+
+	<!-- <apis>
+		<api>
+			<url>http://localhost:8080/cepm</url>
+			<username>superuser</username>
+			<password>admin</password>
+			<repositoryname>Default Domain</repositoryname>
+		</api>
+	</apis> -->
+
+	<adapters>
+		<soap>net.securent.pep.soap.SoapTransportAdaptor</soap>
+		<rmi>net.securent.pep.rmi.RMITransportAdaptor</rmi>
+		<http>net.securent.pep.http.HttpTransportAdaptor</http>
+		<java>net.securent.pep.java.JavaTransportAdaptor</java>
+		<https>net.securent.pep.http.HttpTransportAdaptor</https>
+	</adapters>
+	<!-- Resource discovery -->
+	<record>false</record>
+
+
+	<encryption>
+		<implementors>
+
+			<crypt>
+				com.cisco.epm.util.auth.encryptor.crypt.DefaultCryptEncryptor
+			</crypt>
+		</implementors>
+	</encryption>
+
+	<jacc-config>
+		<!--Application Group Name from the pdp end, eg Prime Group -->
+		<app-group name="Prime group">
+			<enterprise-application name="JACCDEMO">
+				<web-application name="JACCEJBDEMO">
+					<websphere-resource type="webapp" enableaction="true">*</websphere-resource>
+					<websphere-resource type="ejb" enableaction="true">*</websphere-resource>
+					<websphere-resource type="webservice"
+						enableaction="true">*</websphere-resource>
+					<subject source="session" attributename="userName" />
+				</web-application>
+			</enterprise-application>
+		</app-group>
+	</jacc-config>
+	<!--jacc tag ends here -->
+
+</pep_config>
+
+
+
+
+
+
+
+
